@@ -6,11 +6,14 @@
     <header>
       <h1>Pilates Studio</h1>
       <p>Build balance, strength, resilience.</p>
+      <nav>
+        <router-link to="/">Home</router-link>
+        <router-link to="/schedule">Schedule</router-link>
+      </nav>
     </header>
 
     <main>
-      <!-- Placeholder for now, will build components soon -->
-      <p>Welcome to your Pilates Studio App 🌿</p>
+      <router-view></router-view>
     </main>
 
     <footer>
