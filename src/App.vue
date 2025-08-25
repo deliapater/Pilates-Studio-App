@@ -1,15 +1,9 @@
-<script setup>
-</script>
-
 <template>
   <div class="app-container">
     <header>
       <h1>Pilates Studio</h1>
       <p>Build balance, strength, resilience.</p>
-      <nav>
-        <router-link to="/">Home</router-link>
-        <router-link to="/schedule">Schedule</router-link>
-      </nav>
+      <NavBar />
     </header>
 
     <main>
@@ -17,10 +11,16 @@
     </main>
 
     <footer>
-      <small>&copy; 2025 Pilates Studio</small>
+      <small>&copy; {{ year }} Pilates Studio</small>
     </footer>
   </div>
 </template>
+
+<script setup>
+import NavBar from './components/NavBar.vue';
+
+const year = new Date().getFullYear()
+</script>
 
 <style scoped>
 .app-container {
