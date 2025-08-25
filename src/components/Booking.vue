@@ -1,22 +1,3 @@
-<script setup>
-import ClassCard from './ClassCard.vue';
-import { ref } from 'vue'
-import { classes as initialClasses } from '../data/classes'
-
-const classes = ref(initialClasses)
-const message = ref('')
-
-const bookClass = (id) => {
-    const cls = classes.value.find(c => c.id === id)
-    if (cls.spots > 0) {
-        cls.spots--
-        message.value = `✅ Your spot for "${cls.className}" at ${cls.time} is booked!`
-    } else {
-        message.value = '❌ Sorry, this class is full.'
-    }
-}
-</script>
-
 <template>
     <div class="booking-page max-w-xl mx-auto p-4">
         <h2 class="text-2xl font-bold text-center mb-4 text-green-600">Book a Class</h2>
@@ -33,3 +14,45 @@ const bookClass = (id) => {
         <p class="my-4 text-center text-red-600">{{ message }}</p>
     </div>
 </template>
+
+<script setup>
+import ClassCard from './ClassCard.vue';
+import { ref, onMounted } from 'vue'
+import { classes as initialClasses } from '../data/classes'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const classes = ref(initialClasses)
+const message = ref('')
+const userBookings = ref({})
+
+const currentUser = ref('')
+
+onMounted(() => {
+    const user = localStorage.getItem('currentUser')
+    if (!user) {
+        router.push('/login')
+    } else {
+        currentUser.value = user
+        userBookings.value[user] = userBookings.value[user] || []
+    }
+})
+
+const bookClass = (id) => {
+    const cls = classes.value.find(c => c.id === id)
+    const bookings = userBookings.value[currentUser.value] || []
+
+    if (bookings.includes(id)) {
+        message.value = `⚠️ You already booked "${cls.className}""`
+        return
+    }
+    if (cls.spots > 0) {
+        cls.spots--
+        bookings.push(id)
+        userBookings.value[currentUser.value] = bookings
+        message.value = `✅ Your spot for "${cls.className}" at ${cls.time} is booked!`
+    } else {
+        message.value = '❌ Sorry, this class is full.'
+    }
+}
+</script>
