@@ -1,13 +1,29 @@
 <template>
-    <nav>
-        <router-link to="/">Home</router-link>
-        <router-link to="/schedule">Schedule</router-link>
-        <router-link to="/bookings">Bookings</router-link>
+    <nav class="flex justify-between items-center p-4 bg-gray-100 rounded mb-4">
+        <div class="flex space-x-4 items-center">
+            <router-link to="/" class="px-4 py-2 rounded hover:bg-green-100"
+                active-class="bg-green-200 font-bold">Home</router-link>
+            <router-link to="/schedule" class="px-4 py-2 rounded hover:bg-green-100"
+                active-class="bg-green-200 font-bold">Schedule</router-link>
+            <router-link to="/bookings"
+                class="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700">Bookings</router-link>
+        </div>
+        <div v-if="currentUser" class="flex items-center space-x-2">
+            <Logout />
+        </div>
     </nav>
 </template>
 
 <script setup>
 import { RouterLink } from 'vue-router';
+import Logout from './Logout.vue';
+import { ref, onMounted } from 'vue'
+
+const currentUser = ref('')
+
+onMounted(() => {
+    currentUser.value = localStorage.getItem('currentUser') || ''
+})
 </script>
 
 <style scoped>
