@@ -22,3 +22,15 @@ const props = defineProps({
   }
 })
 </script>
+<style scoped>
+div {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  text-align: left;
+}
+h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+</style>

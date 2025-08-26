@@ -1,27 +1,22 @@
 <template>
-    <div class="login-page">
-        <h2>Login</h2>
-
-        <input v-model="username" type="text" placeholder="Enter your username" />
-
-        <button @click="login">Login</button>
-        <p>{{ message }}</p>
+    <div>
+      <input v-model="username" placeholder="Enter your name" />
+      <button @click="login">Login</button>
     </div>
-</template>
+  </template>
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '../stores/userStore'
 
-const router = useRouter();
-const username = ref("");
-const message = ref("");
+const router = useRouter()
+const userStore = useUserStore()
+const username = ref('')
 
 const login = () => {
-    if (!username.value) {
-        message.value = "⚠️ Please enter a username";
-        return;
-    }
-    localStorage.setItem("currentUser", username.value);
-    router.push("/bookings");
-};
+  if (username.value.trim()) {
+    userStore.login(username.value)
+    router.push('/bookings')
+  }
+}
 </script>

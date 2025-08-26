@@ -1,67 +1,63 @@
 <template>
     <nav class="nav-bar">
-        <div>
-            <router-link to="/" >Home</router-link>
-            <router-link to="/schedule">Schedule</router-link>
-            <router-link to="/bookings">Bookings</router-link>
-        </div>
-        <div v-if="currentUser">
-            <Logout />
-        </div>
+      <div>
+        <router-link to="/">Home</router-link>
+        <router-link to="/schedule">Schedule</router-link>
+        <router-link to="/bookings">Bookings</router-link>
+      </div>
+      <div v-if="userStore.currentUser">
+        <Logout />
+      </div>
     </nav>
-</template>
-
-<script setup>
-import { RouterLink } from 'vue-router';
-import Logout from './Logout.vue';
-import { ref, onMounted } from 'vue'
-
-const currentUser = ref('')
-
-onMounted(() => {
-    currentUser.value = localStorage.getItem('currentUser') || ''
-})
-</script>
-
-<style scoped>
-.nav-bar {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.nav-bar a, .nav-bar button {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
-
-.nav-bar a {
-  background-color: #42b883;
-  color: white;
-  text-decoration: none;
-}
-
-.nav-bar a:hover {
-  background-color: #36976c;
-}
-
-.nav-bar button {
-  background-color: #e74c3c;
-  color: white;
-}
-
-.nav-bar button:hover {
-  background-color: #c0392b;
-}
-
-@media (min-width: 600px) {
+  </template>
+  
+  <script setup>
+  import { useUserStore } from '../stores/userStore'
+  import Logout from './Logout.vue'
+  
+  const userStore = useUserStore()
+  </script>
+  
+  <style scoped>
   .nav-bar {
-    justify-content: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
   }
-}
-</style>
+  
+  .nav-bar a,
+  .nav-bar button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .nav-bar a {
+    background-color: #42b883;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .nav-bar a:hover {
+    background-color: #36976c;
+  }
+  
+  .nav-bar button {
+    background-color: #e74c3c;
+    color: white;
+  }
+  
+  .nav-bar button:hover {
+    background-color: #c0392b;
+  }
+  
+  @media (min-width: 600px) {
+    .nav-bar {
+      justify-content: flex-start;
+    }
+  }
+  </style>  
