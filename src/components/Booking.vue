@@ -3,7 +3,8 @@
         <h2 class="text-2xl font-bold text-center mb-4 text-green-600">Book a Class</h2>
 
         <div class="space-y-4">
-            <div v-for="cls in classes" :key="cls.id">
+            <div v-if="loading">Loading classes...</div>
+            <div v-else v-for="cls in classes" :key="cls.id">
                 <ClassCard :className="cls.className" :instructor="cls.instructor" :time="cls.time" :spots="cls.spots"
                     :showSpots="true" />
                 <button @click="bookClass(cls.id)" :disabled="cls.spots <= 0" class="mt-2 px-4 py-2 rounded text-white">
@@ -18,14 +19,12 @@
 <script setup>
 import ClassCard from './ClassCard.vue';
 import { ref, onMounted } from 'vue'
-import { classes as initialClasses } from '../data/classes'
+import { classes } from '../data/classes'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const classes = ref(initialClasses)
 const message = ref('')
 const userBookings = ref({})
-
 const currentUser = ref('')
 
 onMounted(() => {

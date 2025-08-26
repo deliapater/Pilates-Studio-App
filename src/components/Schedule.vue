@@ -9,9 +9,7 @@
 <script setup>
 import { ref } from 'vue';
 import ClassCard from './ClassCard.vue'
-import { classes as initialClasses } from '../data/classes'
-
-const classes = ref(initialClasses)
+import { classes } from '../data/classes'
 </script>
 
 <style scoped>

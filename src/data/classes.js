@@ -1,4 +1,5 @@
-export const classes = [
+import { ref } from 'vue'
+export const classes = ref([
   {
     id: 1,
     className: "Pilates Basics",
@@ -20,4 +21,4 @@ export const classes = [
     time: "06:00 PM",
     spots: 12,
   },
-];
+]);
