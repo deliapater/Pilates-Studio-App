@@ -1,13 +1,13 @@
 <template>
-    <div class="booking-page max-w-xl mx-auto p-4">
-        <h2 class="text-2xl font-bold text-center mb-4 text-green-600">Book a Class</h2>
+    <div class="booking-page">
+        <h2 >Book a Class</h2>
 
-        <div class="space-y-4">
+        <div >
             <div v-if="loading">Loading classes...</div>
             <div v-else v-for="cls in classes" :key="cls.id">
                 <ClassCard :className="cls.className" :instructor="cls.instructor" :time="cls.time" :spots="cls.spots"
                     :showSpots="true" />
-                <button @click="bookClass(cls.id)" :disabled="cls.spots <= 0" class="mt-2 px-4 py-2 rounded text-white">
+                <button @click="bookClass(cls.id)" :disabled="cls.spots <= 0">
                     {{ cls.spots > 0 ? 'Book Now' : 'Full' }}
                 </button>
             </div>

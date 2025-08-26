@@ -1,5 +1,5 @@
 <template>
-    <div class="schedule-page max-w-xl mx-auto p-4">
+    <div class="schedule-page">
         <h2>Class Schedule</h2>
         <ClassCard v-for="cls in classes" :key="cls.id" :className="cls.className" :instructor="cls.instructor"
             :time="cls.time" />

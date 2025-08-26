@@ -4,7 +4,7 @@
         <p>This is the home page of the Pilates Studio App.</p>
 
         <Login v-if="!currentUser" />
-        <p v-else class="text-lg mt-4">Hello, {{ currentUser }}! Check out the schedule or book a class.</p>
+        <p v-else>Hello, {{ currentUser }}! Check out the schedule or book a class.</p>
     </div>
 </template>
 
