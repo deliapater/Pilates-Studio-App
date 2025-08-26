@@ -12,7 +12,7 @@
                 </button>
             </div>
         </div>
-        <p class="my-4 text-center text-red-600">{{ message }}</p>
+        <Toast :message="toastMessage" :type="toastType" />
     </div>
 </template>
 
@@ -21,11 +21,13 @@ import ClassCard from './ClassCard.vue';
 import { ref, onMounted } from 'vue'
 import { classes } from '../data/classes'
 import { useRouter } from 'vue-router'
+import Toast from './Toast.vue';
 
 const router = useRouter()
-const message = ref('')
+const toastType = ref('success')
 const userBookings = ref({})
 const currentUser = ref('')
+const toastMessage= ref('')
 
 onMounted(() => {
     const user = localStorage.getItem('currentUser')
@@ -42,16 +44,19 @@ const bookClass = (id) => {
     const bookings = userBookings.value[currentUser.value] || []
 
     if (bookings.includes(id)) {
-        message.value = `⚠️ You already booked "${cls.className}""`
+        toastMessage.value = `⚠️ You already booked "${cls.className}""`
+        toastType.value = 'error'
         return
     }
     if (cls.spots > 0) {
         cls.spots--
         bookings.push(id)
         userBookings.value[currentUser.value] = bookings
-        message.value = `✅ Your spot for "${cls.className}" at ${cls.time} is booked!`
+        toastMessage.value = `✅ Your spot for "${cls.className}" at ${cls.time} is booked!`
+        toastType = 'success'
     } else {
-        message.value = '❌ Sorry, this class is full.'
+        toastMessage.value = '❌ Sorry, this class is full.'
+        toastType.value = 'error'
     }
 }
 </script>
