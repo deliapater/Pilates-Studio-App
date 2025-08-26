@@ -3,10 +3,9 @@ import { ref } from 'vue'
 import { classes as initialClasses } from '../data/classes'
 
 export const useClassesStore = defineStore('classes', () => {
-  const classes = ref([...initialClasses]) // ref for array
+  const classes = ref([...initialClasses])
 
   const bookClass = (id, userBookings, currentUser) => {
-    // Access the array with .value
     const cls = classes.value.find(c => c.id === id)
     const bookings = userBookings[currentUser] || []
 
