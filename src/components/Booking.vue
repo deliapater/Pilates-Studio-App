@@ -1,62 +1,49 @@
 <template>
     <div class="booking-page">
-        <h2 >Book a Class</h2>
-
-        <div >
-            <div v-if="loading">Loading classes...</div>
-            <div v-else v-for="cls in classes" :key="cls.id">
-                <ClassCard :className="cls.className" :instructor="cls.instructor" :time="cls.time" :spots="cls.spots"
-                    :showSpots="true" />
-                <button @click="bookClass(cls.id)" :disabled="cls.spots <= 0">
-                    {{ cls.spots > 0 ? 'Book Now' : 'Full' }}
-                </button>
-            </div>
+      <h2>Book a Class</h2>
+  
+      <div>
+        <div v-if="loading">Loading classes...</div>
+        <div v-else v-for="cls in classesStore.classes" :key="cls.id">
+          <ClassCard
+            :className="cls.className"
+            :instructor="cls.instructor"
+            :time="cls.time"
+            :spots="cls.spots"
+            :showSpots="true"
+          />
+          <button
+            @click="bookClass(cls.id)"
+            :disabled="cls.spots <= 0"
+          >
+            {{ cls.spots > 0 ? 'Book Now' : 'Full' }}
+          </button>
         </div>
-        <Toast :message="toastMessage" :type="toastType" />
+      </div>
+      <Toast />
     </div>
-</template>
-
-<script setup>
-import ClassCard from './ClassCard.vue';
-import { ref, onMounted } from 'vue'
-import { classes } from '../data/classes'
-import { useRouter } from 'vue-router'
-import Toast from './Toast.vue';
-
-const router = useRouter()
-const toastType = ref('success')
-const userBookings = ref({})
-const currentUser = ref('')
-const toastMessage= ref('')
-
-onMounted(() => {
-    const user = localStorage.getItem('currentUser')
-    if (!user) {
-        router.push('/login')
-    } else {
-        currentUser.value = user
-        userBookings.value[user] = userBookings.value[user] || []
-    }
-})
-
-const bookClass = (id) => {
-    const cls = classes.value.find(c => c.id === id)
-    const bookings = userBookings.value[currentUser.value] || []
-
-    if (bookings.includes(id)) {
-        toastMessage.value = `⚠️ You already booked "${cls.className}""`
-        toastType.value = 'error'
-        return
-    }
-    if (cls.spots > 0) {
-        cls.spots--
-        bookings.push(id)
-        userBookings.value[currentUser.value] = bookings
-        toastMessage.value = `✅ Your spot for "${cls.className}" at ${cls.time} is booked!`
-        toastType = 'success'
-    } else {
-        toastMessage.value = '❌ Sorry, this class is full.'
-        toastType.value = 'error'
-    }
-}
-</script>
+  </template>
+  
+  <script setup>
+  import ClassCard from './ClassCard.vue'
+  import Toast from './Toast.vue'
+  import { useRouter } from 'vue-router'
+  import { useUserStore } from '../stores/userStore'
+  import { useClassesStore } from '../stores/classesStore'
+  import { useToastStore } from '../stores/toastStore'
+  
+  const router = useRouter()
+  const userStore = useUserStore()
+  const classesStore = useClassesStore()
+  const toastStore = useToastStore()
+  
+  if (!userStore.currentUser) {
+    router.push('/login')
+  }
+  
+  const bookClass = (id) => {
+    const result = userStore.bookClass(id, classesStore.classes)
+    toastStore.show(result.message, result.success ? 'success' : 'error')
+  }
+  </script>
+  
