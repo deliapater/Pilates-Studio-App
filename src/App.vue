@@ -12,7 +12,7 @@
 
     <main>
       <div>
-        <LoadingSpinner v-if="loading" message="Loading..." />
+        <LoadingSpinner v-if="spinner.isLoading" />
         <div v-else>
           <router-view />
         </div>
@@ -27,17 +27,22 @@
 
 <script setup>
 import LoadingSpinner from "./components/LoadingSpinner.vue";
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import NavBar from "./components/NavBar.vue";
+import { useSpinnerStore } from "./stores/spinnerStore";
+import { useUserStore } from "./stores/userStore";
 
 const year = new Date().getFullYear();
-
-const loading = ref(true)
+const spinner = useSpinnerStore();
+const userStore =  useUserStore();
 
 onMounted(() => {
-  setTimeout(() => {
-    loading.value = false
-  }, 2000) // simulate fetching data
+  if (userStore.currentUser) {
+    spinner.showSpinner("Loading...");
+    setTimeout(() => {
+      spinner.hideSpinner()
+    }, 2000)
+  }
 })
 </script>
 
@@ -48,7 +53,6 @@ onMounted(() => {
   min-height: 100vh;
   background-color: #f8f8f8;
   padding: 1rem;
-  /* base padding for mobile */
 }
 
 header {
