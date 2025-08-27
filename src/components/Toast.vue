@@ -10,6 +10,7 @@
 import { useToastStore } from '../stores/toastStore'
 
 const toastStore = useToastStore()
+
 </script>
 
 <style scoped>

@@ -12,7 +12,6 @@ export const useClassesStore = defineStore('classes', () => {
     if (!cls) {
       return { message: 'Class not found.', type: 'error' }
     }
-
     if (bookings.includes(id)) {
       return { message: `⚠️ You already booked "${cls.className}"`, type: 'error' }
     }

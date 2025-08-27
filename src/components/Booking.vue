@@ -32,16 +32,13 @@
   import { useClassesStore } from '../stores/classesStore'
   import { useToastStore } from '../stores/toastStore'
   import { useSpinnerStore } from '../stores/spinnerStore'
+
   
   const router = useRouter()
   const userStore = useUserStore()
   const classesStore = useClassesStore()
   const toastStore = useToastStore()
   const spinner = useSpinnerStore()
-  
-  if (!userStore.currentUser) {
-    router.push('/login')
-  }
   
   const bookClass = async(id) => {
     spinner.showSpinner('Booking your class...')
