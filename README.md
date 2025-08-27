@@ -54,4 +54,4 @@ Open your browser at http://localhost:5173 (or the URL provided by Vite).
 ![Home Page](public/screenshots/Home.png)
 
 ### Booking Page
-![Booking Page](public/screenshots/Booking.png)
+![Booking Page](public/screenshots/Bookings.png)
