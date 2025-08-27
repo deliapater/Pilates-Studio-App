@@ -32,6 +32,12 @@ const toastStore = useToastStore()
 const spinner = useSpinnerStore()
 
 const bookClass = async (id) => {
+    if (!userStore.currentUser) {
+        toastStore.showToast('⚠️ You must be logged in to book a class', 'error')
+        return
+    }
+    if (isBooking.value) return
+    isBooking.value = true
     spinner.showSpinner('Booking your class...')
     setTimeout(() => {
         spinner.hideSpinner()
