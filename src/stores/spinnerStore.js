@@ -1,18 +1,18 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-export const useSpinnerStore = defineStore('spinner', {
+export const useSpinnerStore = defineStore("spinner", {
   state: () => ({
     isLoading: false,
-    message: ''
+    message: "",
   }),
   actions: {
-    showSpinner(message = 'Loading...') {
-      this.isLoading = true
-      this.message = message
+    showSpinner(message = "Loading...") {
+      this.isLoading = true;
+      this.message = message;
     },
     hideSpinner() {
-      this.isLoading = false
-      this.message = ''
-    }
-  }
-})
+      this.isLoading = false;
+      this.message = "";
+    },
+  },
+});

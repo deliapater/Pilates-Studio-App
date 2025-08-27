@@ -29,6 +29,7 @@ div {
   border-radius: 8px;
   text-align: left;
 }
+
 h2 {
   font-size: 1.25rem;
   font-weight: bold;

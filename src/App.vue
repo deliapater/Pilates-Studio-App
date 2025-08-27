@@ -34,7 +34,7 @@ import { useUserStore } from "./stores/userStore";
 
 const year = new Date().getFullYear();
 const spinner = useSpinnerStore();
-const userStore =  useUserStore();
+const userStore = useUserStore();
 
 onMounted(() => {
   if (userStore.currentUser) {
