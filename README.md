@@ -11,23 +11,23 @@ A simple Vue 3 application for managing class schedules and bookings at a Pilate
 * Centralized state management with Pinia
 
 ## Installation
-``
 1. Clone the repository:
-``
+```
 git clone <repo-url>
 cd pilates-studio
-``
+```
 
 2. Install dependencies:
-``
+```
 npm install
-``
+```
 
 3. Run the development server:
-``
+```
 npm run dev
+```
 Open your browser at http://localhost:5173 (or the URL provided by Vite).
-``
+
 
 ## Usage
 * Login with a username (minimum 3 characters)
@@ -48,3 +48,10 @@ Open your browser at http://localhost:5173 (or the URL provided by Vite).
 * Calendar view for schedule
 * Search and filter classes
 * Animations for smoother UI
+
+## Screenshots
+### Home Page
+![Home Page](assets/screenshots/Home.png)
+
+### Booking Page
+![Booking Page](assets/screenshots/Booking.png)

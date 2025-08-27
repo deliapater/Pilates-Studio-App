@@ -1,11 +1,11 @@
 <template>
     <nav class="nav-bar">
-        <div>
+        <div class="links">
             <router-link to="/">Home</router-link>
             <router-link to="/schedule">Schedule</router-link>
             <router-link to="/bookings">Bookings</router-link>
         </div>
-        <div v-if="userStore.currentUser">
+        <div v-if="userStore.currentUser" class="logout">
             <Logout />
         </div>
     </nav>
@@ -27,6 +27,15 @@ const userStore = useUserStore();
     margin-top: 1rem;
 }
 
+.nav-bar .links,
+.nav-bar .logout {
+  display: flex;
+  gap: 1rem;
+}
+
+.logout {
+  margin-left: auto; /* pushes logout to the far right */
+}
 .nav-bar a,
 .nav-bar button {
     padding: 0.5rem 1rem;
@@ -59,5 +68,9 @@ const userStore = useUserStore();
     .nav-bar {
         justify-content: flex-start;
     }
+    .logout {
+    margin-left: 0;
+  }
 }
+
 </style>
