@@ -24,12 +24,14 @@ import { useUserStore } from '../stores/userStore'
 import { useClassesStore } from '../stores/classesStore'
 import { useToastStore } from '../stores/toastStore'
 import { useSpinnerStore } from '../stores/spinnerStore'
+import { ref } from 'vue'
 
 const router = useRouter()
 const userStore = useUserStore()
 const classesStore = useClassesStore()
 const toastStore = useToastStore()
 const spinner = useSpinnerStore()
+const isBooking = ref(false)
 
 const bookClass = async (id) => {
     if (!userStore.currentUser) {
