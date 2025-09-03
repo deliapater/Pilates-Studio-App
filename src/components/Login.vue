@@ -3,6 +3,9 @@
     <input type="email" v-model="email" placeholder="Email" />
     <input type="password" v-model="password" placeholder="Password" />
     <button @click="login">Login</button>
+    <p>
+      Don’t have an account? <router-link to="/register">Register here</router-link>
+    </p>
     <p v-if="error" class="error">{{ error }}</p>
   </div>
 </template>
