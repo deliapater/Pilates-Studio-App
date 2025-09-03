@@ -33,7 +33,12 @@ const login = async () => {
       { headers: { 'Content-Type': 'application/json' }, withCredentials: true }
     );
 
-    userStore.login(res.data.user);
+    userStore.currentUser = res.data.user
+    userStore.token = res.data.token
+
+    localStorage.setItem('currentUser', res.data.user)
+    localStorage.setItem('token', res.data.token)
+
     toastStore.showToast('✅ Login successful', 'success');
     router.push('/bookings');
 

@@ -5,7 +5,7 @@
             <router-link to="/schedule">Schedule</router-link>
             <router-link to="/bookings">Bookings</router-link>
         </div>
-        <div v-if="userStore.currentUser" class="logout">
+        <div v-if="userStore.token" class="logout">
             <Logout />
         </div>
     </nav>
