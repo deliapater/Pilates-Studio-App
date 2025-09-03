@@ -46,6 +46,13 @@ onMounted(() => {
     }, 2000)
   }
 })
+
+const fetchBookings = async () => {
+  const res = await axios.get('http://127.0.0.1:8000/api/bookings',
+    {headers: {Authorization: `Bearer ${userStore.token}`}}
+  )
+  userStore.userBookings = res.data
+}
 </script>
 
 <style scoped>

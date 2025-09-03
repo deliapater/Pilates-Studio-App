@@ -3,8 +3,7 @@
         <h2>Book a Class</h2>
 
         <div>
-            <div v-if="loading">Loading classes...</div>
-            <div v-else v-for="cls in classesStore.classes" :key="cls.id">
+            <div v-for="cls in classesStore.classes" :key="cls.id">
                 <ClassCard :className="cls.className" :instructor="cls.instructor" :time="cls.time" :spots="cls.spots"
                     :showSpots="true" />
                 <button @click="bookClass(cls.id)" :disabled="cls.spots <= 0">
@@ -34,16 +33,15 @@ const spinner = useSpinnerStore()
 const isBooking = ref(false)
 
 const bookClass = async (id) => {
-    if (!userStore.currentUser) {
+    if (!userStore.token) {
         toastStore.showToast('⚠️ You must be logged in to book a class', 'error')
+        router.push('/login')
         return
     }
-    if (isBooking.value) return
-    isBooking.value = true
+
     spinner.showSpinner('Booking your class...')
-    setTimeout(() => {
-        spinner.hideSpinner()
-    }, 1500)
+    setTimeout(() => spinner.hideSpinner(), 1500)
+
     const result = classesStore.bookClass(id, userStore.userBookings, userStore.currentUser)
     toastStore.showToast(result.message, result.type)
 }
