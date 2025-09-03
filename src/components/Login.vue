@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
-    <input v-model="username" placeholder="Email" />
-    <input v-model="password" placeholder="Password" />
+    <input type="email" v-model="email" placeholder="Email" />
+    <input type="password" v-model="password" placeholder="Password" />
     <button @click="login">Login</button>
     <p v-if="error" class="error">{{ error }}</p>
   </div>
@@ -10,23 +10,39 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/userStore'
+import { useToastStore } from "../stores/toastStore";
+import axios from 'axios';
 
 const router = useRouter()
 const userStore = useUserStore()
-const username = ref('')
+const email = ref('');
 const password = ref('')
 const error = ref('')
+const toastStore = useToastStore();
 
 const login = async () => {
-  if (!username.value.trim() || !password.value.trim()) {
-    error.value = "⚠️ Please enter both email and password";
+  if (!email.value || !password.value) {
+    toastStore.showToast('⚠️ Please fill in all fields', 'error');
     return;
   }
+
   try {
-    await userStore.login(username.value, password.value);
+    const res = await axios.post(
+      'http://127.0.0.1:8000/api/login',
+      { email: email.value, password: password.value },
+      { headers: { 'Content-Type': 'application/json' }, withCredentials: true }
+    );
+
+    userStore.login(res.data.user);
+    toastStore.showToast('✅ Login successful', 'success');
     router.push('/bookings');
+
   } catch (err) {
-    error.value
+    if (err.response?.status === 401) {
+      toastStore.showToast('❌ Unauthorized: Invalid credentials', 'error');
+    } else {
+      toastStore.showToast('⚠️ Something went wrong. Please try again.', 'error');
+    }
   }
 };
 </script>

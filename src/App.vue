@@ -18,6 +18,7 @@
         </div>
       </div>
     </main>
+    <Toast />
 
     <footer>
       <small>&copy; {{ year }} Pilates Studio</small>
@@ -31,6 +32,7 @@ import { onMounted } from 'vue'
 import NavBar from "./components/NavBar.vue";
 import { useSpinnerStore } from "./stores/spinnerStore";
 import { useUserStore } from "./stores/userStore";
+import Toast from "./components/Toast.vue";
 
 const year = new Date().getFullYear();
 const spinner = useSpinnerStore();

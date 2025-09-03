@@ -7,10 +7,10 @@ export const useUserStore = defineStore("user", {
     token: localStorage.getItem("token") || "",
   }),
   actions: {
-    async login(username, password) {
+    async login(email, password) {
       try {
         const response = await api.post("/login", {
-          email: username,
+          email: email,
           password: password,
         });
 
