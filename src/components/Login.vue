@@ -1,9 +1,10 @@
 <template>
-    <div class="login-container">
-        <input v-model="username" placeholder="Enter your name" />
-        <button @click="login">Login</button>
-        <p v-if="error" class="error">{{ error }}</p>
-    </div>
+  <div class="login-container">
+    <input v-model="username" placeholder="Email" />
+    <input v-model="password" placeholder="Password" />
+    <button @click="login">Login</button>
+    <p v-if="error" class="error">{{ error }}</p>
+  </div>
 </template>
 <script setup>
 import { ref } from 'vue'
@@ -13,22 +14,21 @@ import { useUserStore } from '../stores/userStore'
 const router = useRouter()
 const userStore = useUserStore()
 const username = ref('')
+const password = ref('')
 const error = ref('')
 
-const login = () => {
-    error.value = ''
-    const trimmedName = username.value.trim()
-    if (!trimmedName) {
-        error.value = '⚠️ Please enter a username'
-        return
-    }
-    if (trimmedName.length < 3) {
-        error.value = '⚠️ Username must be at least 3 characters'
-        return
-    }
-    userStore.login(trimmedName)
-    router.push('/bookings')
-}
+const login = async () => {
+  if (!username.value.trim() || !password.value.trim()) {
+    error.value = "⚠️ Please enter both email and password";
+    return;
+  }
+  try {
+    await userStore.login(username.value, password.value);
+    router.push('/bookings');
+  } catch (err) {
+    error.value
+  }
+};
 </script>
 <style scoped>
 .login-container {
