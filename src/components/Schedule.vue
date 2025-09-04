@@ -3,7 +3,7 @@
     <h2>Class Schedule</h2>
     <div v-if="classesStore.loading">Loading classes...</div>
     <div v-else>
-      <div v-for="cls in classesStore.classes" :key="cls.id">
+      <div v-for="cls in classesStore.classes">
         <ClassCard
           :key="cls.id"
           :className="cls.className"
