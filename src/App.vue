@@ -38,6 +38,11 @@ const year = new Date().getFullYear();
 const spinner = useSpinnerStore();
 const userStore = useUserStore();
 
+
+if (userStore.token) {
+  userStore.fetchUserBookings();
+}
+
 onMounted(() => {
   if (userStore.currentUser) {
     spinner.showSpinner("Loading...");
@@ -46,13 +51,6 @@ onMounted(() => {
     }, 2000)
   }
 })
-
-const fetchBookings = async () => {
-  const res = await axios.get('http://127.0.0.1:8000/api/bookings',
-    {headers: {Authorization: `Bearer ${userStore.token}`}}
-  )
-  userStore.userBookings = res.data
-}
 </script>
 
 <style scoped>

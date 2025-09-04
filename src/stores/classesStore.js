@@ -1,27 +1,23 @@
-import { defineStore } from 'pinia'
-import { reactive } from 'vue'
-import { classes as initialClasses } from '../data/classes'
+import { defineStore } from "pinia";
+import api from "../services/api";
 
-export const useClassesStore = defineStore('classes', () => {
-  const classes = reactive(initialClasses)
-
-  const bookClass = (id, userBookings, currentUser) => {
-    const cls = classes.find(c => c.id === id)
-    const bookings = userBookings[currentUser] || []
-
-    if (bookings.includes(id)) {
-      return { message: `⚠️ You already booked "${cls.className}"`, type: 'error' }
-    }
-
-    if (cls.spots > 0) {
-      cls.spots--
-      bookings.push(id)
-      userBookings[currentUser] = bookings
-      return { message: `✅ Your spot for "${cls.className}" at ${cls.time} is booked!`, type: 'success' }
-    } else {
-      return { message: '❌ Sorry, this class is full.', type: 'error' }
-    }
-  }
-
-  return { classes, bookClass }
-})
+export const useClassesStore = defineStore("classes", {
+  state: () => ({
+    classes: [],
+    loading: false,
+  }),
+  actions: {
+    async fetchClasses() {
+      this.loading = true;
+      try {
+        const res = await api.get("/classes");
+        this.classes = res.data || [];
+        console.log("Fetched classes in store: ", this.classes);
+      } catch (err) {
+        console.error("Failed to fetch classes:", err);
+      } finally {
+        this.loading = false;
+      }
+    },
+  },
+});

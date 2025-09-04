@@ -2,7 +2,7 @@ import axios from "axios";
 import { useUserStore } from "../stores/userStore";
 
 const api = axios.create({
-    baseURL: "http://127.0.0.1:8000/api",
+    baseURL: import.meta.env.VITE_API_URL,
     headers: {
         "Content-Type": "application/json"
     },
@@ -11,7 +11,7 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
     const userStore = useUserStore();
     if(userStore.token) {
-        config.headers.Authorization = `Bearer ${useUserStore.token}`
+        config.headers.Authorization = `Bearer ${userStore.token}`
     }
     return config
 });

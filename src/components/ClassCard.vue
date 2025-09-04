@@ -1,13 +1,17 @@
 <template>
   <div>
-    <h2>{{ className }}</h2>
-    <p>Instructor: {{ instructor }}</p>
-    <p>Time: {{ time }}</p>
+    <h2>{{ className || 'No class name' }}</h2>
+    <p>Instructor: {{ instructor || 'TBD' }}</p>
+    <p>Time: {{ time || 'TBD' }}</p>
     <p v-if="showSpots && spots !== null">Spots Available: {{ spots }}</p>
   </div>
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useUserStore } from '../stores/userStore'
+const userStore = useUserStore()
+
 const props = defineProps({
   className: String,
   instructor: String,
@@ -20,6 +24,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   }
+})
+
+const isBooked = computed(() => {
+  return useUserStore.userBookings[useUserStore.currentUser]?.includes(props.classId)
 })
 </script>
 <style scoped>

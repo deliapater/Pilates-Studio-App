@@ -1,12 +1,17 @@
 <template>
     <div class="booking-page">
         <h2>Book a Class</h2>
-
         <div>
             <div v-for="cls in classesStore.classes" :key="cls.id">
-                <ClassCard :className="cls.className" :instructor="cls.instructor" :time="cls.time" :spots="cls.spots"
-                    :showSpots="true" />
-                <button @click="bookClass(cls.id)" :disabled="cls.spots <= 0">
+        
+                <ClassCard 
+                v-if="cls"
+                :className="cls.className" 
+                :instructor="cls.instructor" 
+                :time="cls.time" 
+                :spots="cls.spots"
+                :showSpots="true" />
+                <button v-if="cls" @click="bookClass(cls.id)" :disabled="cls.spots <= 0">
                     {{ cls.spots > 0 ? 'Book Now' : 'Full' }}
                 </button>
             </div>
@@ -24,25 +29,62 @@ import { useClassesStore } from '../stores/classesStore'
 import { useToastStore } from '../stores/toastStore'
 import { useSpinnerStore } from '../stores/spinnerStore'
 import { ref } from 'vue'
+import api from "../services/api";
+import { onMounted } from "vue";
 
 const router = useRouter()
 const userStore = useUserStore()
 const classesStore = useClassesStore()
 const toastStore = useToastStore()
 const spinner = useSpinnerStore()
+
 const isBooking = ref(false)
 
-const bookClass = async (id) => {
+onMounted(async () => {
+  await classesStore.fetchClasses();
+});
+
+
+const bookClass = async (classId) => {
     if (!userStore.token) {
-        toastStore.showToast('⚠️ You must be logged in to book a class', 'error')
+        toastStore.showToast('⚠️ You must be logged in to book a class', "error")
         router.push('/login')
         return
     }
 
-    spinner.showSpinner('Booking your class...')
-    setTimeout(() => spinner.hideSpinner(), 1500)
+    if (isBooking.value) return;
+    isBooking.value = true;
+    spinner.showSpinner('Booking your class...');
 
-    const result = classesStore.bookClass(id, userStore.userBookings, userStore.currentUser)
-    toastStore.showToast(result.message, result.type)
+    try {
+        const res = await api.post(
+            "/bookings",
+            { class_id: classId },
+            {
+                headers: {
+                    Authorization: `Bearer ${userStore.token}`,
+                },
+            }
+        );
+        toastStore.showToast("✅ Class booked successfully!", "success");
+
+        const bookedClass = classesStore.classes.find((c) => c.id === classId);
+        if (bookedClass && bookedClass.spots > 0) {
+            bookedClass.spots--;
+        }
+    } catch (err) {
+        if (err.response?.status === 409) {
+            toastStore.showToast("⚠️ You already booked this class", "error");
+        } else if (err.response?.status === 401) {
+            toastStore.showToast("❌ Unauthorized. Please login again.", "error");
+        } else {
+            toastStore.showToast("⚠️ Something went wrong", "error");
+        }
+    } finally {
+        spinner.hideSpinner();
+        isBooking.value = false;
+        await classesStore.fetchClasses();
+    }
+   
 }
 </script>
