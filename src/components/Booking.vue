@@ -3,15 +3,14 @@
         <h2>Book a Class</h2>
         <div>
             <div v-for="cls in classesStore.classes" :key="cls.id">
-        
-                <ClassCard 
-                v-if="cls"
-                :className="cls.className" 
-                :instructor="cls.instructor" 
-                :time="cls.time" 
-                :spots="cls.spots"
-                :showSpots="true" />
-                <button v-if="cls" @click="bookClass(cls.id)" :disabled="cls.spots <= 0">
+
+                <ClassCard v-if="cls" :className="cls.className" :instructor="cls.instructor" :time="cls.time"
+                    :spots="cls.spots" :showSpots="true" />
+                <button v-if="userStore.userBookings.find(b => b.class_id === cls.id)"
+                    @click="unbookClass(userStore.userBookings.find(b => b.class_id === cls.id).booking_id)">
+                    Unbook
+                </button>
+                <button v-else @click="bookClass(cls.id)" :disabled="cls.spots <= 0">
                     {{ cls.spots > 0 ? 'Book Now' : 'Full' }}
                 </button>
             </div>
@@ -41,7 +40,7 @@ const spinner = useSpinnerStore()
 const isBooking = ref(false)
 
 onMounted(async () => {
-  await classesStore.fetchClasses();
+    await classesStore.fetchClasses();
 });
 
 
@@ -85,6 +84,31 @@ const bookClass = async (classId) => {
         isBooking.value = false;
         await classesStore.fetchClasses();
     }
-   
+
+}
+
+const unbookClass = async (bookingId) => {
+    if (!userStore.token) {
+        toastStore.showToast('⚠️ You must be logged in', 'error');
+        router.push('/login');
+        return;
+    }
+
+    try {
+        await api.delete(`bookings/${bookingId}`, {
+            headers: {
+                Authorization: `Bearer ${userStore.token}`,
+            },
+        });
+        toastStore.showToast('✅ Class unbooked successfully', 'success');
+        userStore.userBookings = userStore.userBookings.filter(
+            (b) => b.id !== bookingId
+        );
+
+        await userStore.fetchUserBookings();
+    } catch (err) {
+        toastStore.showToast('⚠️ Something went wrong', 'error')
+    }
+
 }
 </script>

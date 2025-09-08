@@ -6,7 +6,7 @@ export const useUserStore = defineStore("user", {
   state: () => ({
     currentUser: localStorage.getItem("currentUser") || "",
     token: localStorage.getItem("token") || "",
-    userBooking: []
+    userBookings: []
   }),
   actions: {
     async login(email, password) {
